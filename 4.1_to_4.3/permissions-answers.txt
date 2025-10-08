@@ -1,0 +1,67 @@
+Answer the questions from the lab manual in this file.
+Peoblem 4.1 and 4.2 for erercise
+----------------------------------------------------------------------------
+#Permissions:file1 can only be read/written by owner.file2 can be read by everyone,but only
+modified by owner
+commands: mkdir /root/question
+          cd /root/question
+          touch file1 file2
+          chmod 600 file1
+          chmod 644 file2
+          ls -l >> /root/permissions-answers.txt
+-rw------- 1 root root 0 Oct  7 02:40 file1
+-rw-r--r-- 1 root root 0 Oct  7 02:40 file2
+
+#Permissions of Groups,I use chown and chmod create a shared group,the owner is FrobozzCo
+/shared permission : drwxrwx--- that means members of FrobozzCo can read/write/execute
+others have no access.
+commands:groupadd FrobozzCo
+         useradd -G FrobozzCo joe
+         useradd -G FrobozzCo mary
+         mkdir /root/share_perm
+         chown :FrobozzCo/root/share_perm
+         chmod 770 /root/share_perm
+         ls -ld /root/share_perm >> /root/permissions-answers.txt
+drwxrwx--- 2 root FrobozzCo 4096 Oct  7 03:00 /root/share_perm
+/shared permission : drwxrwx--- that means members of FrobozzCo can read/write/execute
+#wideopen permission:drwxrwxrwx that means every can do everything for the files
+Commands:  mkdir /root/wideopen
+           chmod 777 /root/wideopen
+           ls -ld /root/wideopen >> /root/permissions-answers.txt
+drwxrwxrwx 2 root root 4096 Oct  7 03:06 /root/wideopen
+
+#Special permissions
+Setuid: user run as root
+Commands: mkdir /root/special
+          cd /root/special
+          cp /bin/ls ./asroot
+          chmod 4755 asroot
+-rwsr-xr-x 1 root root 147176 Oct  7 03:34 /root/special/asroot
+
+Setgid:run with the permission of the file's group
+Commands: mkdir group
+          chown :FrobozzCo group
+          chmod 2770 group
+drwxrws--- 2 root FrobozzCo   4096 Oct  7 03:49 group
+
+sticky:protect files from deletion by others
+Commands: mkdir sticky
+          chmod 1777 sticky
+          ls -ld group sticky >> /root/permissions-answers.txt
+drwxrwxrwt 2 root root        4096 Oct  7 03:54 sticky
+--------------------------------------------------------------
+4.3: Home directory security
+
+drwxr-x--- 750 root wheel /emp
+drwxr-x--- 750 curly curly /emp/curly
+drwxr-x--- 750 larry larry /emp/larry
+drwxr-x--- 750 moe moe /emp/moe
+drwxr-xr-x 755 root root /admins
+drwxrwsr-x 2775 bwk bwk /admins/bwk
+drwxrwsr-x 2775 dmr dmr /admins/dmr
+drwxrwsr-x 2775 ken ken /admins/ken
+
+wheel:x:1006:ken,dmr,bwk
+ken:x:1010:larry,bwk,dmr
+dmr:x:1011:curly,ken,bwk
+bwk:x:1012:moe,dmr,ken
